@@ -7,34 +7,52 @@
 namespace yarn {
 
 template <class data_type>
-class channel_put {
+class ChannelPut {
  public:
-  virtual ~channel_put() = default;
-  void put(const data_type& d) { put_(d); }
-  size_t size() { return size_(); }
-  std::string name() { return name_(); }
+  virtual ~ChannelPut() = default;
+  void Put(const data_type& d) { Put_(d); }
+  size_t Size() { return Size_(); }
+  std::string Name() { return Name_(); }
 
  protected:
-  virtual void put_(const data_type& d) = 0;
-  virtual size_t size_() = 0;
-  virtual std::string name_() const = 0;
+  virtual void Put_(const data_type& d) = 0;
+  virtual size_t Size_() = 0;
+  virtual std::string Name_() const = 0;
 };
 
 template <class data_type>
-class channel_get {
+class ChannelGet {
  public:
-  virtual ~channel_get() = default;
-  data_type get() { return get_(); }
-  size_t size() { return size_(); }
-  std::string name() { return name_(); }
+  virtual ~ChannelGet() = default;
+  data_type Get() { return Get_(); }
+  size_t Size() { return Size_(); }
+  std::string Name() { return Name_(); }
 
  protected:
-  virtual data_type get_() = 0;
-  virtual size_t size_() = 0;
-  virtual std::string name_() const = 0;
+  virtual data_type Get_() = 0;
+  virtual size_t Size_() = 0;
+  virtual std::string Name_() const = 0;
 };
 
-//FIXME: Implement channel class combining truss_channel.h with SystemC Event
+template <typename data_type>
+class GTestChannel : public ChannelGet<data_type> {
+ public:
+  GTestChannel(const std::string& n) : name_(n) {};
+  virtual ~GTestChannel() = default;
+
+  data_type Get_() {
+    // FIXME: Return a specific scenario for testing here
+    data_type returned;
+    return returned;
+  }
+  size_t Size_() { return -1; }
+  std::string Name_() const { return name_; }
+
+ private:
+  std::string name_;
+};
+
+// FIXME: Implement real channel with put and get inheritance
 
 }  // namespace yarn
 

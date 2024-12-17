@@ -7,6 +7,7 @@
 
 #include "base/channel.h"
 #include "models/period_generator/period_generator.h"
+#include "libs/scp/report/include/scp/report.h"
 
 namespace state_bus {
 struct Transaction {
@@ -14,7 +15,7 @@ struct Transaction {
   uint32_t in_keep_alive;
 };
 
-typedef yarn::channel_get<Transaction> Pipeline;
+typedef yarn::ChannelGet<Transaction> Pipeline;
 }  // namespace state_bus
 
 namespace pin_capture {
@@ -22,10 +23,12 @@ namespace pin_capture {
 class Reference : ::sc_core::sc_module {
  public:
   Reference(::sc_core::sc_module_name, const std::string name);
-  void start();
+  void Start();
+  std::string Name() { return name_; }
 
  private:
   const std::string name_;
+  SCP_LOGGER();
 
  protected:
   virtual const period_generator::Transaction AwaitBoc() = 0;
@@ -33,7 +36,7 @@ class Reference : ::sc_core::sc_module {
   // FIXME: Add GetMethod's for other Pin Capture interfaces
 };
 
-class ReferenceAgent : Reference {
+class ReferenceAgent : public Reference {
  private:
   period_generator::Pipeline& per_gen_;
   state_bus::Pipeline& state_bus_pipeline_;

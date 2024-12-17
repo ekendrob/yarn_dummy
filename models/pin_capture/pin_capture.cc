@@ -1,9 +1,13 @@
 #include "pin_capture.h"
-// #include "libs/scp/report/include/report.h"
 
-pin_capture::Reference::Reference(::sc_core::sc_module_name, const std::string name) : name_(name) { SC_METHOD(start); }
+#include "libs/scp/report/include/scp/report.h"
 
-void pin_capture::Reference::start() {
+pin_capture::Reference::Reference(::sc_core::sc_module_name, const std::string name) : name_(name) {
+  SCP_INFO() << "Constructor [" << sc_time_stamp() << "]";
+  SC_METHOD(Start);
+}
+
+void pin_capture::Reference::Start() {
   // Get the next BOC
   auto boc = AwaitBoc();
 
@@ -27,9 +31,7 @@ pin_capture::ReferenceAgent::ReferenceAgent(::sc_core::sc_module_name sc_name, c
                                             state_bus::Pipeline& state_bus_pipeline)
     : Reference(sc_name, name), per_gen_(period_generator), state_bus_pipeline_(state_bus_pipeline) {}
 
-const period_generator::Transaction pin_capture::ReferenceAgent::AwaitBoc() {
-  return per_gen_.get();
-}
+const period_generator::Transaction pin_capture::ReferenceAgent::AwaitBoc() { return per_gen_.Get(); }
 
 const state_bus::Transaction pin_capture::ReferenceAgent::GetStateBusTransaction() {
   //  - Return correct transaction for current boc cycle

@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
-project (pin_capture)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -23,14 +21,38 @@ CPMAddPackage(
       "INSTALL_GTEST OFF"
       "gtest_force_shared_crt ON"
 )
-enable_testing()
-include(GoogleTest)
 
 set(SYSTEMC_INCLUDE_DIR $ENV{SYSTEMC_HOME}/include)
 set(SYSTEMC_LIBRARY_DIR $ENV{SYSTEMC_HOME}/lib)
 
-add_library(pin_capture models/pin_capture/pin_capture.cc)
-target_include_directories(pin_capture PRIVATE ${CMAKE_SOURCE_DIR})
-target_include_directories(pin_capture PRIVATE ${CMAKE_SOURCE_DIR}/libs/trusster/teal/systemc)
-target_include_directories(pin_capture PRIVATE ${CMAKE_SOURCE_DIR}/libs/trusster/truss/cpp/inc/)
-target_include_directories(pin_capture PRIVATE ${SYSTEMC_INCLUDE_DIR})
+project (pin_capture)
+cpmaddpackage(
+  NAME report
+  SOURCE_DIR ${PROJECT_SOURCE_DIR}/libs/scp/report
+)
+
+add_library(${PROJECT_NAME} models/pin_capture/pin_capture.cc)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${SYSTEMC_INCLUDE_DIR})
+
+target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+target_link_libraries(${PROJECT_NAME} ${SYSTEMC_LIBRARY_DIR}/libsystemc${CMAKE_SHARED_LIBRARY_SUFFIX})
+target_link_libraries(${PROJECT_NAME} reporting)
+
+
+project (pin_capture_gtest)
+enable_testing()
+add_executable(${PROJECT_NAME} tests/pin_capture/pin_capture_tests.cc models/pin_capture/pin_capture.cc)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${SYSTEMC_INCLUDE_DIR})
+# target_include_directories(${PROJECT_NAME} PRIVATE ${gtest_SOURCE_DIR}/googletest/include)
+target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+target_link_libraries(${PROJECT_NAME} gtest)
+target_link_libraries(${PROJECT_NAME} ${SYSTEMC_LIBRARY_DIR}/libsystemc${CMAKE_SHARED_LIBRARY_SUFFIX})
+target_link_libraries(${PROJECT_NAME} reporting)
+
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME})

@@ -15,7 +15,7 @@ struct Transaction {
   uint32_t residue;
 };
 
-typedef yarn::channel_get<Transaction> Pipeline;
+typedef yarn::ChannelGet<Transaction> Pipeline;
 
 // So BOC cycles are transactions with a channel (Reference) that models can wait upon
 // Each Reference Model will have it's own channel it can wait on.
