@@ -34,21 +34,3 @@ pin_capture::ReferenceAgent::ReferenceAgent(::sc_core::sc_module_name sc_name,
 const period_generator::Transaction pin_capture::ReferenceAgent::AwaitBoc() { return per_gen_.Get(); }
 
 const state_bus::Transaction pin_capture::ReferenceAgent::GetStateBusTransaction() { return state_bus_pipeline_.Get(); }
-
-const period_generator::Transaction pin_capture::GoogleTestReferenceAgent::AwaitBoc() {
-  period_generator::Transaction returned;
-  returned.boc_count = boc_count_;
-  if (boc_count_ == 0)
-    returned.is_halted = true;
-  else if (boc_count_ == 1)
-    returned.is_running = true;
-  else
-    returned.is_running = false;
-  boc_count_++;
-  return returned;
-}
-
-const state_bus::Transaction pin_capture::GoogleTestReferenceAgent::GetStateBusTransaction() {
-  // FIXME: Add logic here
-  return state_bus::Transaction();
-}

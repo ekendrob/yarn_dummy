@@ -56,15 +56,6 @@ class ReferenceAgent : public Reference {
   const state_bus::Transaction GetStateBusTransaction() override;
 };
 
-// FIXME: This should be replaces with google MOCK class
-class GoogleTestReferenceAgent : public Reference {
- public:
-  GoogleTestReferenceAgent(::sc_core::sc_module_name name) : Reference{name}, boc_count_(0) {};
-  const period_generator::Transaction AwaitBoc() override;
-  const state_bus::Transaction GetStateBusTransaction() override;
-  uint32_t boc_count_;
-};
-
 struct Transaction {
   uint32_t data;
 };

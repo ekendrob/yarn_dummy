@@ -1,4 +1,5 @@
 #include <gmock/gmock.h>
+
 #include "gtest/gtest.h"
 #include "libs/scp/report/include/scp/report.h"
 #include "models/pin_capture/pin_capture.h"
@@ -23,23 +24,31 @@ int sc_main(int argc, char *argv[]) {
 }
 
 namespace {
+
+using ::testing::Return;
+
 class MockPinCapture : public pin_capture::Reference {
  public:
   MockPinCapture() : Reference("MockPinCapture") {};
   MOCK_METHOD((const period_generator::Transaction), AwaitBoc, (), (override));
+  MOCK_METHOD((const state_bus::Transaction), GetStateBusTransaction, (), (override));
 };
 
-TEST(pin_capture_tests, dummy) {
-  // Expect two strings not to be equal.
-  EXPECT_STRNE("hello", "world");
-  // Expect equality.
-  EXPECT_EQ(7 * 6, 42);
+TEST(pin_capture_tests, name) {
+  MockPinCapture pin_capture;
+  EXPECT_EQ("MockPinCapture", pin_capture.Name());
 }
 
-TEST(pin_capture_tests, get_name) {
-  sc_clock clock("clock", 1, SC_NS);  // Create a clock signal with 1 ns period
-  pin_capture::GoogleTestReferenceAgent pin_capture("pin_capture_1");
-  EXPECT_EQ("pin_capture_1", pin_capture.Name());
+TEST(pin_capture_tests, minimal_pattern_with_default_period) {
+  period_generator::Transaction boc_halted = {.is_halted = true};
+  period_generator::Transaction boc_running = {.is_running = true};
+  MockPinCapture pin_capture;
+  EXPECT_CALL(pin_capture, AwaitBoc())
+      .Times(3)
+      .WillOnce(Return(boc_halted))
+      .WillOnce(Return(boc_running))
+      .WillRepeatedly(Return(boc_halted));
+  pin_capture.Start();
 }
 
 }  // namespace
