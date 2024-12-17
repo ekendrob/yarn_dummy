@@ -34,9 +34,5 @@ pin_capture::ReferenceAgent::ReferenceAgent(::sc_core::sc_module_name sc_name, c
 const period_generator::Transaction pin_capture::ReferenceAgent::AwaitBoc() { return per_gen_.Get(); }
 
 const state_bus::Transaction pin_capture::ReferenceAgent::GetStateBusTransaction() {
-  //  - Return correct transaction for current boc cycle
-  //    - If next transaction in pipe-line.boc == current boc cycle return new transaction
-  //    - If next transaction in pipeline
-
-  return current_transaction_;
+  return state_bus_pipeline_.Get();
 }

@@ -6,8 +6,8 @@
 #include <string>
 
 #include "base/channel.h"
-#include "models/period_generator/period_generator.h"
 #include "libs/scp/report/include/scp/report.h"
+#include "models/period_generator/period_generator.h"
 
 namespace state_bus {
 struct Transaction {
@@ -20,6 +20,8 @@ typedef yarn::ChannelGet<Transaction> Pipeline;
 
 namespace pin_capture {
 
+// Abstract top transaction layer. This is where the meat of the code goes.
+// Responsible for calculating transaction based on BOC cycles
 class Reference : ::sc_core::sc_module {
  public:
   Reference(::sc_core::sc_module_name, const std::string name);
@@ -36,6 +38,8 @@ class Reference : ::sc_core::sc_module {
   // FIXME: Add GetMethod's for other Pin Capture interfaces
 };
 
+// ReferenceAgent sits in-between the Reference Model and the Wire layer (that defines the fiels of a transaction)
+// There can be several different agents depending on where the Reference Model is used (Block, System, Stand alone, Google Test etc.)
 class ReferenceAgent : public Reference {
  private:
   period_generator::Pipeline& per_gen_;
@@ -51,6 +55,11 @@ class ReferenceAgent : public Reference {
   const state_bus::Transaction GetStateBusTransaction() override;
 };
 
+struct Transaction {
+  uint32_t data;
+};
+
+typedef yarn::ChannelGet<Transaction> Pipeline;
 }  // namespace pin_capture
 
 #endif  // YARN_MODELS_PIN_CAPTURE_H_

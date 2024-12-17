@@ -2,6 +2,7 @@
 #define YARN_MODELS_PERIOD_GENERATOR_H_
 
 #include <cstdint>
+
 #include "base/channel.h"
 
 namespace period_generator {
