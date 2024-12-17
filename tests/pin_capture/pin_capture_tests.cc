@@ -1,3 +1,4 @@
+#include <gmock/gmock.h>
 #include "gtest/gtest.h"
 #include "libs/scp/report/include/scp/report.h"
 #include "models/pin_capture/pin_capture.h"
@@ -22,6 +23,12 @@ int sc_main(int argc, char *argv[]) {
 }
 
 namespace {
+class MockPinCapture : public pin_capture::Reference {
+ public:
+  MockPinCapture() : Reference("MockPinCapture") {};
+  MOCK_METHOD((const period_generator::Transaction), AwaitBoc, (), (override));
+};
+
 TEST(pin_capture_tests, dummy) {
   // Expect two strings not to be equal.
   EXPECT_STRNE("hello", "world");
@@ -31,9 +38,7 @@ TEST(pin_capture_tests, dummy) {
 
 TEST(pin_capture_tests, get_name) {
   sc_clock clock("clock", 1, SC_NS);  // Create a clock signal with 1 ns period
-  yarn::GTestChannel<period_generator::Transaction>  period_generator("GTest_period_generator");
-  yarn::GTestChannel<state_bus::Transaction>  state_bus_pipeline("GTest_state_bus");
-  pin_capture::ReferenceAgent pin_capture("pin_capture", "pin_capture_1", period_generator, state_bus_pipeline);
+  pin_capture::GoogleTestReferenceAgent pin_capture("pin_capture_1");
   EXPECT_EQ("pin_capture_1", pin_capture.Name());
 }
 

@@ -47,10 +47,11 @@ enable_testing()
 add_executable(${PROJECT_NAME} tests/pin_capture/pin_capture_tests.cc models/pin_capture/pin_capture.cc)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${SYSTEMC_INCLUDE_DIR})
-# target_include_directories(${PROJECT_NAME} PRIVATE ${gtest_SOURCE_DIR}/googletest/include)
-target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_include_directories(${PROJECT_NAME} PUBLIC ${GTEST_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${GMOCK_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME} gtest)
+target_link_libraries(${PROJECT_NAME} gmock)
 target_link_libraries(${PROJECT_NAME} ${SYSTEMC_LIBRARY_DIR}/libsystemc${CMAKE_SHARED_LIBRARY_SUFFIX})
 target_link_libraries(${PROJECT_NAME} reporting)
 

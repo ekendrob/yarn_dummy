@@ -16,7 +16,7 @@ class ChannelPut {
 
  protected:
   virtual void Put_(const data_type& d) = 0;
-  virtual size_t Size_() = 0;
+  virtual size_t Size_() const = 0;
   virtual std::string Name_() const = 0;
 };
 
@@ -30,29 +30,46 @@ class ChannelGet {
 
  protected:
   virtual data_type Get_() = 0;
-  virtual size_t Size_() = 0;
+  virtual size_t Size_() const = 0;
   virtual std::string Name_() const = 0;
 };
 
-template <typename data_type>
-class GTestChannel : public ChannelGet<data_type> {
+template <typename DataType>
+class Channel : public ChannelPut<DataType>, public ChannelGet<DataType> {
  public:
-  GTestChannel(const std::string& n) : name_(n) {};
-  virtual ~GTestChannel() = default;
+  Channel(const std::string& name, uint64_t depth = std::numeric_limits<uint64_t>::max())
+      : name_(name),
+        depth_(depth),
+        get_event_(std::string(name + "_get_event").c_str()),
+        put_event_(std::string(name + "_put_event").c_str()) {};
 
-  data_type Get_() {
-    // FIXME: Return a specific scenario for testing here
-    data_type returned;
-    return returned;
-  }
-  size_t Size_() { return -1; }
-  std::string Name_() const { return name_; }
+  virtual ~Channel() = default;
+  size_t Size() { return ChannelPut<DataType>::Size(); }  // Note! Either one works
 
  private:
-  std::string name_;
-};
+  const std::string name_;
+  const uint64_t depth_;
+  std::deque<DataType> storage_;
+  sc_event get_event_;
+  sc_event put_event_;
 
-// FIXME: Implement real channel with put and get inheritance
+  void Put_(const DataType& d) {
+    if (Size() >= depth_) wait(get_event_);
+    storage_.push_back(d);
+    put_event_.notify();
+  }
+
+  DataType Get_() {
+    while (!Size()) wait(put_event_);
+    DataType returned(storage_.front());
+    storage_.pop_front();
+    get_event_.notify();
+    return returned;
+  }
+
+  std::string Name_() const { return name_; }
+  size_t Size_() const { return storage_.size(); }
+};
 
 }  // namespace yarn
 

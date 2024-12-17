@@ -24,9 +24,9 @@ namespace pin_capture {
 // Responsible for calculating transaction based on BOC cycles
 class Reference : ::sc_core::sc_module {
  public:
-  Reference(::sc_core::sc_module_name, const std::string name);
+  Reference(::sc_core::sc_module_name);
   void Start();
-  std::string Name() { return name_; }
+  std::string Name() const { return std::string(name()); }
 
  private:
   const std::string name_;
@@ -39,7 +39,8 @@ class Reference : ::sc_core::sc_module {
 };
 
 // ReferenceAgent sits in-between the Reference Model and the Wire layer (that defines the fiels of a transaction)
-// There can be several different agents depending on where the Reference Model is used (Block, System, Stand alone, Google Test etc.)
+// There can be several different agents depending on where the Reference Model is used (Block, System, Stand alone,
+// Google Test etc.)
 class ReferenceAgent : public Reference {
  private:
   period_generator::Pipeline& per_gen_;
@@ -47,12 +48,21 @@ class ReferenceAgent : public Reference {
   state_bus::Transaction current_transaction_;
 
  public:
-  ReferenceAgent(::sc_core::sc_module_name, std::string name, period_generator::Pipeline& period_generator,
+  ReferenceAgent(::sc_core::sc_module_name, period_generator::Pipeline& period_generator,
                  state_bus::Pipeline& state_bus_pipeline);
 
  protected:
   const period_generator::Transaction AwaitBoc() override;
   const state_bus::Transaction GetStateBusTransaction() override;
+};
+
+// FIXME: This should be replaces with google MOCK class
+class GoogleTestReferenceAgent : public Reference {
+ public:
+  GoogleTestReferenceAgent(::sc_core::sc_module_name name) : Reference{name}, boc_count_(0) {};
+  const period_generator::Transaction AwaitBoc() override;
+  const state_bus::Transaction GetStateBusTransaction() override;
+  uint32_t boc_count_;
 };
 
 struct Transaction {
