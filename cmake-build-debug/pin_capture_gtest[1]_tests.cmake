@@ -1,0 +1,5 @@
+add_test([=[pin_capture_tests.name]=]  /Users/ekendrob/Projects/yarn/cmake-build-debug/pin_capture_gtest [==[--gtest_filter=pin_capture_tests.name]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[pin_capture_tests.name]=]  PROPERTIES WORKING_DIRECTORY /Users/ekendrob/Projects/yarn/cmake-build-debug SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[pin_capture_tests.minimal_pattern_with_default_period]=]  /Users/ekendrob/Projects/yarn/cmake-build-debug/pin_capture_gtest [==[--gtest_filter=pin_capture_tests.minimal_pattern_with_default_period]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[pin_capture_tests.minimal_pattern_with_default_period]=]  PROPERTIES WORKING_DIRECTORY /Users/ekendrob/Projects/yarn/cmake-build-debug SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  pin_capture_gtest_TESTS pin_capture_tests.name pin_capture_tests.minimal_pattern_with_default_period)

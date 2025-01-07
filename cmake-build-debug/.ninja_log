@@ -1,0 +1,16 @@
+# ninja log v6
+6	1272	1734528871522791701	CMakeFiles/pin_capture_gtest.dir/tests/pin_capture/pin_capture_tests.cc.o	9c9ca259abff5aa
+2757	2838	1734526530286234094	lib/libgmock.a	9e421207fa9c14db
+2665	2757	1734526530194711383	lib/libgtest.a	bffc908690bf6e43
+2	2664	1734526527531091963	_deps/gtest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o	725923e09fd22187
+4	3147	1734541861385369959	build.ninja	f0d53bbe553d428d
+1272	1986	1734528873501545050	pin_capture_gtest[1]_tests.cmake	1798502938f74152
+1272	1986	1734528873501545050	pin_capture_gtest	1798502938f74152
+7	888	1734528871523653032	CMakeFiles/pin_capture_gtest.dir/models/pin_capture/pin_capture.cc.o	e08f7ad005119c8f
+3452	3551	1734526530981215012	_deps/report-build/libreporting.a	6ea3007c4a18bb5d
+1397	1657	1734526528955495515	_deps/fmt-build/libfmtd.a	fa0a04e876dba92a
+9	3451	1734526527538662876	_deps/report-build/CMakeFiles/reporting.dir/src/report.cpp.o	490426050cfa4cf2
+1272	1986	1734528873501545050	/Users/ekendrob/Projects/yarn/cmake-build-debug/pin_capture_gtest[1]_tests.cmake	1798502938f74152
+3	1397	1734526527532883472	_deps/fmt-build/CMakeFiles/fmt.dir/src/format.cc.o	42bd92256161b6f9
+8	1897	1734526527537840914	_deps/gtest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o	61636a48c4cd798d
+5	813	1734526527535508861	_deps/fmt-build/CMakeFiles/fmt.dir/src/os.cc.o	d803a00c8b1b3dcc

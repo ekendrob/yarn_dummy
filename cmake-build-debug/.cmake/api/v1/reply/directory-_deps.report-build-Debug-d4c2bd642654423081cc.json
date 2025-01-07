@@ -1,0 +1,131 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"packageproject"
+		],
+		"files" : 
+		[
+			"cmake-build-debug/_deps/packageproject.cmake-src/CMakeLists.txt",
+			"libs/scp/report/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 100,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 60,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 76,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 82,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 90,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 110,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "Development",
+			"destination" : "lib/reporting-1.0",
+			"paths" : 
+			[
+				"_deps/report-build/libreporting.a"
+			],
+			"targetId" : "reporting::@1e482469784645df9892",
+			"targetIndex" : 35,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/reporting-1.0",
+			"exportName" : "reportingTargets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "reporting::@1e482469784645df9892",
+					"index" : 35
+				}
+			],
+			"paths" : 
+			[
+				"_deps/report-build/CMakeFiles/Export/413a6aedeabdd7a3fdd949d4362e4987/reportingTargets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/reporting-1.0",
+			"paths" : 
+			[
+				"cmake-build-debug/_deps/report-build/reportingConfigVersion.cmake",
+				"cmake-build-debug/_deps/report-build/reportingConfig.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				{
+					"from" : "libs/scp/report/include",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"_deps/report-build/libreporting.a"
+			],
+			"targetId" : "reporting::@1e482469784645df9892",
+			"targetIndex" : 35,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/report-build",
+		"source" : "libs/scp/report"
+	}
+}
