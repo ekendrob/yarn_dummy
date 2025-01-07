@@ -18,13 +18,13 @@ struct Transaction {
 
 typedef yarn::ChannelGet<Transaction> Pipeline;
 
-// So BOC cycles are transactions with a channel (Reference) that models can wait upon
-// Each Reference Model will have it's own channel it can wait on.
-// There should be a single central source for Period Generation and from that model there will be pipeline fanout
-// to all other models
+// So BOC cycles are transactions with a channel (Reference) that models can
+// wait upon Each Reference Model will have it's own channel it can wait on.
+// There should be a single central source for Period Generation and from that
+// model there will be pipeline fanout to all other models
 
-// This is a simple agent that monitors the corresponding RTL signals and drives the event that way
-// class ReferenceRTLAgent : Reference {};
+// This is a simple agent that monitors the corresponding RTL signals and drives
+// the event that way class ReferenceRTLAgent : Reference {};
 
 // Behavioral agent that models the behavior of the Period Generator
 // class ReferenceSystemCAgent : Reference {};

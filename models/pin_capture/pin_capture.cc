@@ -2,7 +2,7 @@
 
 #include "libs/scp/report/include/scp/report.h"
 
-pin_capture::Reference::Reference(::sc_core::sc_module_name) {
+pin_capture::Reference::Reference(const ::sc_core::sc_module_name&) {
   SCP_INFO() << "Constructor [" << sc_time_stamp() << "]";
   SC_METHOD(Start);
 }
@@ -26,11 +26,12 @@ void pin_capture::Reference::Start() {
   }
 }
 
-pin_capture::ReferenceAgent::ReferenceAgent(::sc_core::sc_module_name sc_name,
+pin_capture::ReferenceAgent::ReferenceAgent(const ::sc_core::sc_module_name& sc_name,
                                             period_generator::Pipeline& period_generator,
-                                            state_bus::Pipeline& state_bus_pipeline)
-    : Reference(sc_name), per_gen_(period_generator), state_bus_pipeline_(state_bus_pipeline) {}
+                                            state_bus::Pipeline& state_bus_pipeline) :
+  Reference(sc_name), per_gen_(period_generator), state_bus_pipeline_(state_bus_pipeline), current_transaction_() {
+}
 
-const period_generator::Transaction pin_capture::ReferenceAgent::AwaitBoc() { return per_gen_.Get(); }
+period_generator::Transaction pin_capture::ReferenceAgent::AwaitBoc() { return per_gen_.Get(); }
 
-const state_bus::Transaction pin_capture::ReferenceAgent::GetStateBusTransaction() { return state_bus_pipeline_.Get(); }
+state_bus::Transaction pin_capture::ReferenceAgent::GetStateBusTransaction() { return state_bus_pipeline_.Get(); }

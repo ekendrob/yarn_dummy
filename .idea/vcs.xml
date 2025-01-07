@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/cpm-cmake-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/fmt-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/gtest-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/packageproject.cmake-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/spdlog_git-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/cpm-cmake-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/fmt-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/gtest-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/packageproject.cmake-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/spdlog_git-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/trusster" vcs="Git" />
+  </component>
+</project>

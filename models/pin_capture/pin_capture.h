@@ -10,57 +10,62 @@
 #include "models/period_generator/period_generator.h"
 
 namespace state_bus {
-struct Transaction {
-  uint32_t boc_a_count;
-  uint32_t in_keep_alive;
-};
+    struct Transaction {
+        uint32_t boc_a_count;
+        uint32_t in_keep_alive;
+    };
 
-typedef yarn::ChannelGet<Transaction> Pipeline;
-}  // namespace state_bus
+    typedef yarn::ChannelGet<Transaction> Pipeline;
+} // namespace state_bus
 
 namespace pin_capture {
+    // Abstract top transaction layer. This is where the meat of the code goes.
+    // Responsible for calculating transaction based on BOC cycles
+    class Reference : ::sc_core::sc_module {
+    public:
+        explicit Reference(const ::sc_core::sc_module_name &);
 
-// Abstract top transaction layer. This is where the meat of the code goes.
-// Responsible for calculating transaction based on BOC cycles
-class Reference : ::sc_core::sc_module {
- public:
-  Reference(::sc_core::sc_module_name);
-  void Start();
-  std::string Name() const { return std::string(name()); }
+        void Start();
 
- private:
-  const std::string name_;
-  SCP_LOGGER();
+        std::string Name() const { return {name()}; }
 
- protected:
-  virtual const period_generator::Transaction AwaitBoc() = 0;
-  virtual const state_bus::Transaction GetStateBusTransaction() = 0;
-  // FIXME: Add GetMethod's for other Pin Capture interfaces
-};
+    private:
+        const std::string name_;
+        SCP_LOGGER();
 
-// ReferenceAgent sits in-between the Reference Model and the Wire layer (that defines the fiels of a transaction)
-// There can be several different agents depending on where the Reference Model is used (Block, System, Stand alone,
-// Google Test etc.)
-class ReferenceAgent : public Reference {
- private:
-  period_generator::Pipeline& per_gen_;
-  state_bus::Pipeline& state_bus_pipeline_;
-  state_bus::Transaction current_transaction_;
+    protected:
+        virtual period_generator::Transaction AwaitBoc() = 0;
 
- public:
-  ReferenceAgent(::sc_core::sc_module_name, period_generator::Pipeline& period_generator,
-                 state_bus::Pipeline& state_bus_pipeline);
+        virtual state_bus::Transaction GetStateBusTransaction() = 0;
 
- protected:
-  const period_generator::Transaction AwaitBoc() override;
-  const state_bus::Transaction GetStateBusTransaction() override;
-};
+        // FIXME: Add GetMethod's for other Pin Capture interfaces
+    };
 
-struct Transaction {
-  uint32_t data;
-};
+    // ReferenceAgent sits in-between the Reference Model and the Wire layer (that defines the fields of a transaction)
+    // There can be several different agents depending on where the Reference Model is used (Block, System, Stand alone,
+    // Google Test etc.)
+    class ReferenceAgent : public Reference {
+    private:
+        period_generator::Pipeline &per_gen_;
+        state_bus::Pipeline &state_bus_pipeline_;
+        state_bus::Transaction current_transaction_;
 
-typedef yarn::ChannelGet<Transaction> Pipeline;
-}  // namespace pin_capture
+    public:
+        ReferenceAgent(const ::sc_core::sc_module_name &,
+                       period_generator::Pipeline &period_generator,
+                       state_bus::Pipeline &state_bus_pipeline);
+
+    protected:
+        period_generator::Transaction AwaitBoc() override;
+
+        state_bus::Transaction GetStateBusTransaction() override;
+    };
+
+    struct Transaction {
+        uint32_t data;
+    };
+
+    typedef yarn::ChannelGet<Transaction> Pipeline;
+} // namespace pin_capture
 
 #endif  // YARN_MODELS_PIN_CAPTURE_H_
